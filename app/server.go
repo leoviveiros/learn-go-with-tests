@@ -61,7 +61,7 @@ func (p *PlayerServer) processWin(w http.ResponseWriter, player string) {
 type PlayerStore interface {
     GetPlayerScore(name string) int
 	RecordWin(name string)
-    GetLeague() []Player
+    GetLeague() League
 }
 
 func GetPlayerScore(player string) string {
