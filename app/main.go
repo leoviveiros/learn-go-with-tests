@@ -6,7 +6,8 @@ import (
 )
 
 func main() {
-	server := &PlayerServer{NewInMemoryPlayerStore()}
+	store := NewInMemoryPlayerStore()
+	server := NewPlayerServer(store)
 	err := http.ListenAndServe(":8080", server)
 
 	if err != nil {
