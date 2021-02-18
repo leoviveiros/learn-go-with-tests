@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/leoviveiros/learn-go-with-tests/poker"
+	poker "learn-go-with-tests/app"
 )
 
 const dbFileName = "game.db.json"
