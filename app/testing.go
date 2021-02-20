@@ -2,13 +2,17 @@ package poker
 
 import (
 	"fmt"
+	"io"
 	"testing"
 	"time"
 )
 
+var DummyGame = &GameSpy{}
+
 type ScheduledAlert struct {
 	At     time.Duration
 	Amount int
+    To io.Writer
 }
 
 func (s ScheduledAlert) String() string {
@@ -19,8 +23,8 @@ type SpyBlindAlerter struct {
 	alerts []ScheduledAlert
 }
 
-func (s *SpyBlindAlerter) ScheduleAlertAt(at time.Duration, amount int) {
-	s.alerts = append(s.alerts, ScheduledAlert{at, amount})
+func (s *SpyBlindAlerter) ScheduleAlertAt(at time.Duration, amount int, to io.Writer) {
+	s.alerts = append(s.alerts, ScheduledAlert{at, amount, to})
 }
 
 type StubPlayerStore struct {
@@ -45,12 +49,16 @@ func (s *StubPlayerStore) GetLeague() League {
 type GameSpy struct {
     StartedWith  int
 	StartCalled bool
+    BlindAlert  []byte
+
+    FinishedCalled   bool
     FinishedWith string
 }
 
-func (g *GameSpy) Start(numberOfPlayers int) {
+func (g *GameSpy) Start(numberOfPlayers int, out io.Writer) {
     g.StartedWith = numberOfPlayers
 	g.StartCalled = true
+    out.Write(g.BlindAlert)
 }
 
 func (g *GameSpy) Finish(winner string) {

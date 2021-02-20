@@ -1,6 +1,7 @@
 package poker
 
 import (
+	"io"
 	"testing"
 	"time"
 )
@@ -10,9 +11,9 @@ func TestGame_Start(t *testing.T) {
 
 	t.Run("schedules alerts on game start for 5 players", func(t *testing.T) {
 		blindAlerter := &SpyBlindAlerter{}
-		game := NewGame(blindAlerter, dummyPlayerStore)
+		game := NewTexasHoldem(blindAlerter, dummyPlayerStore)
 
-		game.Start(5)
+		game.Start(5, io.Discard)
 
 		cases := []ScheduledAlert{
 			{At: 0 * time.Second, Amount: 100},
@@ -33,9 +34,9 @@ func TestGame_Start(t *testing.T) {
 
 	t.Run("schedules alerts on game start for 7 players", func(t *testing.T) {
 		blindAlerter := &SpyBlindAlerter{}
-		game := NewGame(blindAlerter, dummyPlayerStore)
+		game := NewTexasHoldem(blindAlerter, dummyPlayerStore)
 
-		game.Start(7)
+		game.Start(7, io.Discard)
 
 		cases := []ScheduledAlert{
 			{At: 0 * time.Second, Amount: 100},
@@ -53,7 +54,7 @@ func TestGame_Finish(t *testing.T) {
     var dummyBlindAlerter = &SpyBlindAlerter{}
 
 	store := &StubPlayerStore{}
-	game := NewGame(dummyBlindAlerter, store)
+	game := NewTexasHoldem(dummyBlindAlerter, store)
 	winner := "Ruth"
 
 	game.Finish(winner)

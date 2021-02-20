@@ -2,14 +2,13 @@ package poker
 
 import (
 	"bytes"
+	"os"
 	"strings"
 	"testing"
 	"time"
 )
 
 func TestCLI(t *testing.T) {
-    // var dummyBlindAlerter = &SpyBlindAlerter{}
-    // var dummyPlayerStore = &StubPlayerStore{}
     var dummyStdOut = &bytes.Buffer{}
     
     t.Run("record chris win from user input", func(t *testing.T) {
@@ -41,23 +40,25 @@ func TestCLI(t *testing.T) {
         playerStore := &StubPlayerStore{}
         blindAlerter := &SpyBlindAlerter{}
 
-        game := NewGame(blindAlerter, playerStore)
+        game := NewTexasHoldem(blindAlerter, playerStore)
 
         cli := NewCLI(in, dummyStdOut, game)
         cli.PlayPoker()
 
+        dest := os.Stdout
+
         cases := []ScheduledAlert{
-            {0 * time.Second, 100},
-            {10 * time.Minute, 200},
-            {20 * time.Minute, 300},
-            {30 * time.Minute, 400},
-            {40 * time.Minute, 500},
-            {50 * time.Minute, 600},
-            {60 * time.Minute, 800},
-            {70 * time.Minute, 1000},
-            {80 * time.Minute, 2000},
-            {90 * time.Minute, 4000},
-            {100 * time.Minute, 8000},
+            {0 * time.Second, 100, dest},
+            {10 * time.Minute, 200, dest},
+            {20 * time.Minute, 300, dest},
+            {30 * time.Minute, 400, dest},
+            {40 * time.Minute, 500, dest},
+            {50 * time.Minute, 600, dest},
+            {60 * time.Minute, 800, dest},
+            {70 * time.Minute, 1000, dest},
+            {80 * time.Minute, 2000, dest},
+            {90 * time.Minute, 4000, dest},
+            {100 * time.Minute, 8000, dest},
         }
 
         CheckSchedulingCases(t, cases, blindAlerter)
